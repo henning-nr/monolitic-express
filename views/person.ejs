@@ -1,0 +1,154 @@
+
+	 <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Cadastrar Pessoa</h4>
+      <p>Cadastre ou edite uma pessoa</p>
+
+
+			<div class="row">
+    <form class="col s12">
+      <div class="row">
+
+
+				<%for(let name in pessoas[1]){%>
+					
+        <div class="input-field col m6 s12">
+          <input placeholder="Placeholder" id="<%=name%>" type="text" class="validate">
+          <label class="active" for="<%=name%>"><%=name.toUpperCase()%></label>
+        </div>
+					<%}%>
+
+															<div style="width: 100%;
+    justify-content: center;
+    display: flex;">
+			 <div id="loading2" class="preloader-wrapper big">
+    <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+	
+      </div>
+		</form>
+      </div>
+			
+			
+    </div>
+    <div class="modal-footer">
+      <a  class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+      <a onclick="editarPessoa()" class="modal-close waves-effect waves-green btn-flat">Salvar</a>
+    </div>
+  </div>
+
+<div class="row center">
+					 <table>
+        <thead>
+          <tr>
+						<%for(let col of cols){%>
+							<%if(col !== 'ID'){%>
+              <th><%=col%></th>
+							<%}%>
+						<%}%>
+          </tr>
+        </thead>
+<div style="overflow-x: auto">
+	
+        <tbody >
+					<%for(let pessoa of pessoas){%>
+						<tr>
+							<%for(let key in pessoa){%>
+							<%if(key !== 'id'){%>
+								<td><%=pessoa[key]%></td>
+							<%}%>
+							<%}%>
+<!-- 								EDITAR BUTÃO -->
+								<td><a href="#modal1" onclick="editar(<%=pessoa.id%>)" class="btn-floating btn-small modal-trigger waves-effect waves-light blue"><i class="material-icons">create</i></a>
+<a onclick="deletar(<%=pessoa.id%>)" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">delete</i></a>
+        </td>
+						</tr>
+					<%}%>
+          <tr>
+          </tr>
+        </tbody>
+</div>
+      </table>
+			</div>
+<script>
+	$('.modal').modal();
+</script>
+
+
+							<script>
+							// Função editar
+							function editar(id){
+								$('#loading2').addClass("active");
+								$('#id').val('');					
+			$('#nome').val('');			
+			$('#sangue').val('');			
+			$('#signo').val('');		
+
+																$.ajax({
+    url: 'pessoas/edit/'+id,
+    type: 'GET',
+    success: function(result) {
+        // Do something with the result
+			$('#id').val(result.id);			
+			$('#id').prop('disabled', true);			
+			$('#nome').val(result.nome);			
+			$('#sangue').val(result.tipo_sanguineo);			
+			$('#signo').val(result.signo);		
+			$('#loading2').removeClass("active");
+    }
+});
+								
+							}
+							// Função deletar
+							function deletar(id){
+								$('#loading').addClass("active");
+								$.ajax({
+    url: 'pessoas/delete/'+id,
+    type: 'DELETE',
+    success: function(result) {
+        // Do something with the result
+			$('#content').html(result)
+			$('#loading').removeClass("active");
+			
+    }
+});
+							}
+
+															// Função deletar
+							function editarPessoa(){
+								$('#loading').addClass("active");
+									let id = $('#id').val()						
+								let data = {
+									nome: $('#nome').val(),
+									tipo_sanguineo: $('#sangue').val(),			
+									signo: $('#signo').val()
+								}
+
+		$.ajax({
+    url: 'pessoas/update/'+id,
+    type: 'PATCH',
+		data: data,
+    success: function(result) {
+        // Do something with the result
+			$('#content').html(result)
+			$('#loading').removeClass("active");
+			
+    },
+			error: function(result) {
+        // Do something with the result
+			$('#content').html(result)
+			$('#loading').removeClass("active");
+			
+    }
+});
+							}
+						</script>

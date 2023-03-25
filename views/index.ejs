@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>CRUD APP</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="#">CRUD</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="#">CRUD</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+	
+	
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+
+			
+      <br><br>
+      <h3 class="header center orange-text">Lista de Pessoas</h3>
+      <div class="row center">
+        <h5 class="header col s12 light">Lista de pessoas cadastras no sistema</h5>
+														<div style="width: 100%;
+    justify-content: center;
+    display: flex;">
+			 <div id="loading" class="preloader-wrapper big">
+    <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div><div class="gap-patch">
+        <div class="circle"></div>
+      </div><div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+  </div>
+      </div>
+
+
+			
+			<div id="content">
+
+			</div>
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+
+			<script>
+				
+							  $(document).ready(function(){
+    								getPerson()
+  });
+
+				function getPerson() {
+					    								$.ajax({
+    url: '/person',
+    type: 'GET',
+    success: function(result) {
+        $('#content').html(result)// Do something with the result
+    }
+});
+				}
+			</script>
+
+			 <script>
+  if (!!window.EventSource) {
+		const source = new EventSource('/sse');
+source.addEventListener('itemDeleted', (event) => {
+  const data = JSON.parse(event.data);
+	 M.toast({html: `Item ${data.id} deletado.`}) 
+  getPerson()
+});
+source.addEventListener('itemUpdated', (event) => {
+  const data = JSON.parse(event.data);
+	 M.toast({html: `Item ${data.id} atualizado.`}) 
+  getPerson()
+});
+  } else {
+    console.log("Your browser doesn't support SSE")
+  }
+  </script>
+
+					
+  </body>
+</html>
