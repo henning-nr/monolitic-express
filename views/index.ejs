@@ -64,19 +64,20 @@
 
 			<script>
 				
-							  $(document).ready(function(){
-    								getPerson()
+	$(document).ready(function(){
+  	getPerson()
   });
 
-				function getPerson() {
-					    								$.ajax({
+function getPerson() {
+		$.ajax({
     url: '/person',
     type: 'GET',
     success: function(result) {
-        $('#content').html(result)// Do something with the result
+      $('#content').html(result)// Do something with the result
 			setTimeout(()=>{
 					$('.modal').modal();
-				},500)
+				$('.fixed-action-btn').floatingActionButton();
+				},1000)
     }
 });
 				}
@@ -93,6 +94,12 @@ source.addEventListener('itemDeleted', (event) => {
 source.addEventListener('itemUpdated', (event) => {
   const data = JSON.parse(event.data);
 	 M.toast({html: `Item ${data.id} atualizado.`}) 
+  getPerson()
+});
+source.addEventListener('itemSaved', (event) => {
+  const data = JSON.parse(event.data);
+	console.log(data)
+	 M.toast({html: `Item ${data.body.nome} salvo.`}) 
   getPerson()
 });
   } else {
