@@ -67,6 +67,9 @@
 				
 	$(document).ready(function(){
   	getPerson()
+							  $(document).ready(function(){
+    								getPerson()
+         
   });
 
 function getPerson() {
@@ -74,11 +77,16 @@ function getPerson() {
     url: '/person',
     type: 'GET',
     success: function(result) {
+
       $('#content').html(result)// Do something with the result
 			setTimeout(()=>{
 					$('.modal').modal();
 				$('.fixed-action-btn').floatingActionButton();
 				},1000)
+        $('#content').html(result)// Do something with the result
+        setTimeout(()=>{
+					$('.modal').modal();
+				},500)
     }
 });
 				}
@@ -107,7 +115,6 @@ source.addEventListener('itemSaved', (event) => {
     console.log("Your browser doesn't support SSE")
   }
   </script>
-
 					
   </body>
 </html>
