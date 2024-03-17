@@ -4,9 +4,9 @@ var axios = require('axios')
 
 router.get('/', function(req, res, next) {
 
-axios.get('/api/pessoas').then((r)=>{
+	axios.get('/api/pessoas').then((r) => {
 		// aqui eu mostro meus dados
-		pessoaAux = r.data.map((pessoa)=>{
+		pessoaAux = r.data.map((pessoa) => {
 			pessoa = {
 				id: pessoa.id,
 				nome: pessoa.nome,
@@ -16,24 +16,33 @@ axios.get('/api/pessoas').then((r)=>{
 			return pessoa
 		})
 		// Colunas da tabela
-		let cols = ['ID','NOME','SIGNO','SANGUE','AÇÕES']
+		let cols = ['ID', 'NOME', 'SIGNO', 'SANGUE', 'AÇÕES']
 		// renderizando index e passando o objeto pessoas
-  	res.render('person', { pessoas: pessoaAux, cols:cols });
-	})	
+		res.render('person', { pessoas: pessoaAux, cols: cols });
+	})
 });
 
 
-router.get("/edit/:id",function(req,res,next) {
+router.get("/edit/:id", function(req, res, next) {
 
 	console.log("EDITANDO A ROTA")
-axios.get('/api/pessoas/'+req.params.id).then((r)=>{
-	res.send(r.data)
-})
-})
-
-
-router.delete("/delete/:id",function(req,res,next) {
-axios.delete('http://localhost:4000/api/pessoas/'+req.params.id).then((r)=>{
+	axios.get('/api/pessoas/' + req.params.id).then((r) => {
 		res.send(r.data)
+	})
+
 })
+
+router.post("/insert", function(req, res, next) {
+	console.log("salvando A ROTA")
+	console.log(req.body.data)
+	axios.post('/api/pessoas/', req.body).then((r) => {
+		res.send(r.data)
+	})
+})
+
+
+router.delete("/delete/:id", function(req, res, next) {
+	axios.delete('http://localhost:4000/api/pessoas/' + req.params.id).then((r) => {
+		res.send(r.data)
+	})
 })	

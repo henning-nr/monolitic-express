@@ -3,6 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+	<link rel="icon" href="https://is5-ssl.mzstatic.com/image/thumb/Purple111/v4/4c/ea/79/4cea79ba-b91a-bc02-ef78-4f7ab86b87b3/source/1200x630bb.jpg" type="image/x-icon">
   <title>CRUD APP</title>
 
   <!-- CSS  -->
@@ -64,16 +65,24 @@
 
 			<script>
 				
+	$(document).ready(function(){
+  	getPerson()
 							  $(document).ready(function(){
     								getPerson()
          
   });
 
-				function getPerson() {
-					    								$.ajax({
+function getPerson() {
+		$.ajax({
     url: '/person',
     type: 'GET',
     success: function(result) {
+
+      $('#content').html(result)// Do something with the result
+			setTimeout(()=>{
+					$('.modal').modal();
+				$('.fixed-action-btn').floatingActionButton();
+				},1000)
         $('#content').html(result)// Do something with the result
         setTimeout(()=>{
 					$('.modal').modal();
@@ -94,6 +103,12 @@ source.addEventListener('itemDeleted', (event) => {
 source.addEventListener('itemUpdated', (event) => {
   const data = JSON.parse(event.data);
 	 M.toast({html: `Item ${data.id} atualizado.`}) 
+  getPerson()
+});
+source.addEventListener('itemSaved', (event) => {
+  const data = JSON.parse(event.data);
+	console.log(data)
+	 M.toast({html: `Item ${data.body.nome} salvo.`}) 
   getPerson()
 });
   } else {
